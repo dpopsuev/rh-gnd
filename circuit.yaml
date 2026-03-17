@@ -1,0 +1,59 @@
+# Harvester Circuit — Schematic Base
+#
+# Canonical circuit topology owned by the Harvester schematic. Consumers import
+# this base via `import: harvester` and overlay domain-specific additions.
+#
+# Gathers code context from configured source repositories.
+# Designed for composition: any circuit can invoke this as a
+# subgraph node via handler_type: circuit.
+#
+# Pipeline:
+#   tree   — ensure repos are available, list file trees
+#   search — search repos for relevant code using context keywords
+#   read   — read matched files (token-budgeted)
+#
+# Input context (inherited from parent):
+#   harvester.search_keywords — []string of search terms
+#   params.sources            — source catalog (set by inject.sources hook)
+#
+# Output: the "read" node produces a *harvester.CodeContext artifact
+# containing trees, search results, and file contents.
+
+circuit: harvester
+topology: cascade
+handler_type: transformer
+
+nodes:
+  - name: tree
+    description: "Ensure repos available and list file trees"
+    approach: methodical
+    handler: dsr.tree
+
+  - name: search
+    description: "Search repos for relevant code"
+    approach: analytical
+    handler: dsr.search
+
+  - name: read
+    description: "Read matched source files (token-budgeted)"
+    approach: methodical
+    handler: dsr.read
+
+edges:
+  - id: tree-search
+    name: "Tree to Search"
+    from: tree
+    to: search
+
+  - id: search-read
+    name: "Search to Read"
+    from: search
+    to: read
+
+  - id: read-done
+    name: "Read to Done"
+    from: read
+    to: _done
+
+start: tree
+done: _done

@@ -1,0 +1,7 @@
+name: cycle-a
+includes:
+  - cycle-b
+repos:
+  - org: test
+    name: repo-a
+    purpose: testing cycles

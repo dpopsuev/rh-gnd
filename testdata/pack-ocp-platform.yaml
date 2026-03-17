@@ -1,0 +1,12 @@
+name: ocp-platform
+domain: OCP Platform
+description: Shared OpenShift platform sources
+
+repos:
+  - org: openshift
+    name: cluster-etcd-operator
+    purpose: etcd lifecycle
+    branch_pattern: "release-{ocp_version}"
+
+docs:
+  - docs/ocp-architecture.md

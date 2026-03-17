@@ -1,0 +1,19 @@
+component: rh-dsr
+module: github.com/dpopsuev/rh-dsr
+namespace: dsr
+version: "1.0.0"
+description: "Red Hat Data Source Retriever — pluggable code context gathering"
+factory: NewRouter
+serve: cmd/serve
+adapter: NewMCPReader
+requires:
+  origami: ">=0.3.0"
+  sockets:
+    - name: git
+      type: Driver
+      option: WithGitDriver
+      description: Git repository driver for source code access
+    - name: docs
+      type: Driver
+      option: WithDocsDriver
+      description: HTTP documentation driver for web-based docs

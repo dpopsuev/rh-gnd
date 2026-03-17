@@ -1,0 +1,23 @@
+name: ptp
+domain: PTP Operator
+description: PTP Operator sources for root-cause analysis
+version_key: ocp_version
+includes:
+  - ocp-platform
+
+repos:
+  - org: openshift
+    name: linuxptp-daemon
+    purpose: "SUT: PTP daemon"
+    branch_pattern: "release-{ocp_version}"
+  - org: openshift
+    name: ptp-operator
+    purpose: "SUT: operator lifecycle"
+    branch_pattern: "release-{ocp_version}"
+  - org: openshift-kni
+    name: cnf-features-deploy
+    purpose: test framework
+    branch_pattern: master
+
+docs:
+  - docs/ptp-architecture.md

@@ -1,0 +1,25 @@
+sources:
+  - name: ptp-operator
+    kind: repo
+    uri: ../../ptp-operator
+    purpose: "SUT: lifecycle"
+    tags:
+      component: ptp
+      role: operator
+  - name: api-spec
+    kind: spec
+    uri: https://internal.example.com/api/v2/spec.yaml
+    purpose: API reference
+    tags:
+      component: api
+      role: reference
+  - name: runbook
+    kind: doc
+    uri: ./docs/runbook.md
+    purpose: Troubleshooting guide
+  - name: architecture
+    kind: doc
+    uri: ./docs/arch.md
+    purpose: System architecture (always loaded)
+    read_policy: always
+    local_path: ./docs/arch.md
