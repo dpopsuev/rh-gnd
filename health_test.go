@@ -7,13 +7,13 @@ import (
 
 	sdkmcp "github.com/modelcontextprotocol/go-sdk/mcp"
 
-	dsr "github.com/dpopsuev/rh-dsr"
+	dsr "github.com/dpopsuev/rh-gnd"
 	"github.com/dpopsuev/origami/schematics/toolkit"
 )
 
-func newHarvesterServeMux(router *dsr.AccessRouter) *http.ServeMux {
+func newGNDServeMux(router *dsr.AccessRouter) *http.ServeMux {
 	server := sdkmcp.NewServer(
-		&sdkmcp.Implementation{Name: "test-harvester", Version: "v0.1.0"},
+		&sdkmcp.Implementation{Name: "test-gnd", Version: "v0.1.0"},
 		nil,
 	)
 	dsr.RegisterTools(server, router)
@@ -40,7 +40,7 @@ func newHarvesterServeMux(router *dsr.AccessRouter) *http.ServeMux {
 
 func TestHealthz_ReturnsOK(t *testing.T) {
 	router := dsr.NewRouter()
-	mux := newHarvesterServeMux(router)
+	mux := newGNDServeMux(router)
 	srv := httptest.NewServer(mux)
 	defer srv.Close()
 
@@ -57,7 +57,7 @@ func TestHealthz_ReturnsOK(t *testing.T) {
 
 func TestReadyz_NoDrivers_Returns503(t *testing.T) {
 	router := dsr.NewRouter()
-	mux := newHarvesterServeMux(router)
+	mux := newGNDServeMux(router)
 	srv := httptest.NewServer(mux)
 	defer srv.Close()
 
@@ -75,7 +75,7 @@ func TestReadyz_NoDrivers_Returns503(t *testing.T) {
 func TestReadyz_WithDriver_ReturnsOK(t *testing.T) {
 	driver := &stubDriver{kind: toolkit.SourceKindRepo}
 	router := dsr.NewRouter(dsr.WithGitDriver(driver))
-	mux := newHarvesterServeMux(router)
+	mux := newGNDServeMux(router)
 	srv := httptest.NewServer(mux)
 	defer srv.Close()
 

@@ -9,14 +9,14 @@ import (
 	"github.com/dpopsuev/origami/schematics/toolkit"
 )
 
-// RegisterTools adds the harvester schematic's MCP tools to the given server.
+// RegisterTools adds the GND schematic's MCP tools to the given server.
 // The four tools (ensure, search, read, list) delegate to the AccessRouter.
 func RegisterTools(server *sdkmcp.Server, router *AccessRouter) {
 	server.AddTool(
 		&sdkmcp.Tool{
-			Name:        "harvester_ensure",
-			Description: "Ensure a harvester source is available (e.g. clone a repo)",
-			InputSchema: json.RawMessage(`{"type":"object","properties":{"source":{"type":"object","description":"Harvester source descriptor"}}}`),
+			Name:        "gnd_ensure",
+			Description: "Ensure a GND source is available (e.g. clone a repo)",
+			InputSchema: json.RawMessage(`{"type":"object","properties":{"source":{"type":"object","description":"GND source descriptor"}}}`),
 		},
 		func(ctx context.Context, req *sdkmcp.CallToolRequest) (*sdkmcp.CallToolResult, error) {
 			var args struct {
@@ -36,9 +36,9 @@ func RegisterTools(server *sdkmcp.Server, router *AccessRouter) {
 
 	server.AddTool(
 		&sdkmcp.Tool{
-			Name:        "harvester_search",
-			Description: "Search a harvester source for matching content",
-			InputSchema: json.RawMessage(`{"type":"object","properties":{"source":{"type":"object","description":"Harvester source descriptor"},"query":{"type":"string","description":"Search query"},"max_results":{"type":"integer","description":"Maximum results to return"}}}`),
+			Name:        "gnd_search",
+			Description: "Search a GND source for matching content",
+			InputSchema: json.RawMessage(`{"type":"object","properties":{"source":{"type":"object","description":"GND source descriptor"},"query":{"type":"string","description":"Search query"},"max_results":{"type":"integer","description":"Maximum results to return"}}}`),
 		},
 		func(ctx context.Context, req *sdkmcp.CallToolRequest) (*sdkmcp.CallToolResult, error) {
 			var args struct {
@@ -68,9 +68,9 @@ func RegisterTools(server *sdkmcp.Server, router *AccessRouter) {
 
 	server.AddTool(
 		&sdkmcp.Tool{
-			Name:        "harvester_read",
-			Description: "Read content from a harvester source at a given path",
-			InputSchema: json.RawMessage(`{"type":"object","properties":{"source":{"type":"object","description":"Harvester source descriptor"},"path":{"type":"string","description":"Path to read"}}}`),
+			Name:        "gnd_read",
+			Description: "Read content from a GND source at a given path",
+			InputSchema: json.RawMessage(`{"type":"object","properties":{"source":{"type":"object","description":"GND source descriptor"},"path":{"type":"string","description":"Path to read"}}}`),
 		},
 		func(ctx context.Context, req *sdkmcp.CallToolRequest) (*sdkmcp.CallToolResult, error) {
 			var args struct {
@@ -92,9 +92,9 @@ func RegisterTools(server *sdkmcp.Server, router *AccessRouter) {
 
 	server.AddTool(
 		&sdkmcp.Tool{
-			Name:        "harvester_list",
-			Description: "List contents of a harvester source directory",
-			InputSchema: json.RawMessage(`{"type":"object","properties":{"source":{"type":"object","description":"Harvester source descriptor"},"root":{"type":"string","description":"Root path to list from"},"max_depth":{"type":"integer","description":"Maximum directory depth"}}}`),
+			Name:        "gnd_list",
+			Description: "List contents of a GND source directory",
+			InputSchema: json.RawMessage(`{"type":"object","properties":{"source":{"type":"object","description":"GND source descriptor"},"root":{"type":"string","description":"Root path to list from"},"max_depth":{"type":"integer","description":"Maximum directory depth"}}}`),
 		},
 		func(ctx context.Context, req *sdkmcp.CallToolRequest) (*sdkmcp.CallToolResult, error) {
 			var args struct {
@@ -120,14 +120,14 @@ func RegisterTools(server *sdkmcp.Server, router *AccessRouter) {
 	)
 }
 
-// SynthesizeToolOpts configures the harvester_synthesize MCP tool.
+// SynthesizeToolOpts configures the gnd_synthesize MCP tool.
 type SynthesizeToolOpts struct {
 	Synthesizer  Synthesizer
 	PackResolver PackResolver
 	Router       *AccessRouter
 }
 
-// RegisterSynthesizeTool adds the harvester_synthesize MCP tool.
+// RegisterSynthesizeTool adds the gnd_synthesize MCP tool.
 // It loads a source pack by name, synthesizes a domain context artifact,
 // and returns the result as JSON.
 func RegisterSynthesizeTool(server *sdkmcp.Server, opts SynthesizeToolOpts) {
@@ -136,7 +136,7 @@ func RegisterSynthesizeTool(server *sdkmcp.Server, opts SynthesizeToolOpts) {
 	}
 	server.AddTool(
 		&sdkmcp.Tool{
-			Name:        "harvester_synthesize",
+			Name:        "gnd_synthesize",
 			Description: "Synthesize a domain context artifact from a source pack",
 			InputSchema: json.RawMessage(`{"type":"object","properties":{"pack_path":{"type":"string","description":"Path to source pack YAML file"},"token_budget":{"type":"integer","description":"Maximum token budget for the artifact"},"sections":{"type":"array","items":{"type":"string"},"description":"Sections to include (component-map, source-index, version-info)"},"attrs":{"type":"object","description":"Attributes for branch resolution (e.g. ocp_version)"}},"required":["pack_path"]}`),
 		},

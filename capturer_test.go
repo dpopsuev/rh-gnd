@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/dpopsuev/origami/calibrate"
-	"github.com/dpopsuev/rh-dsr"
+	"github.com/dpopsuev/rh-gnd"
 	"github.com/dpopsuev/origami/schematics/toolkit"
 )
 
@@ -96,12 +96,12 @@ docs:
 	outDir := t.TempDir()
 	capturer := dsr.NewCapturer(router, nil)
 
-	if capturer.Schematic() != "harvester" {
-		t.Fatalf("Schematic() = %q, want %q", capturer.Schematic(), "harvester")
+	if capturer.Schematic() != "gnd" {
+		t.Fatalf("Schematic() = %q, want %q", capturer.Schematic(), "gnd")
 	}
 
 	cfg := calibrate.CaptureConfig{
-		Schematic:  "harvester",
+		Schematic:  "gnd",
 		SourcePack: packPath,
 		OutputDir:  outDir,
 	}
@@ -119,8 +119,8 @@ docs:
 	if m.SchemaVersion != calibrate.SchemaV1 {
 		t.Errorf("SchemaVersion = %q, want %q", m.SchemaVersion, calibrate.SchemaV1)
 	}
-	if m.Schematic != "harvester" {
-		t.Errorf("Schematic = %q, want %q", m.Schematic, "harvester")
+	if m.Schematic != "gnd" {
+		t.Errorf("Schematic = %q, want %q", m.Schematic, "gnd")
 	}
 	if m.CapturedAt.IsZero() {
 		t.Error("CapturedAt is zero")
@@ -169,9 +169,9 @@ docs:
 		t.Errorf("ValidateBundle errors: %v", errs)
 	}
 
-	// Harvester-specific validation.
+	// GND-specific validation.
 	validator := &dsr.Validator{}
-	if validator.Schematic() != "harvester" {
+	if validator.Schematic() != "gnd" {
 		t.Errorf("validator Schematic() = %q", validator.Schematic())
 	}
 	vErrs := validator.Validate(os.DirFS(outDir))
@@ -207,7 +207,7 @@ repos:
 
 	capturer := dsr.NewCapturer(router, nil)
 	cfg := calibrate.CaptureConfig{
-		Schematic:  "harvester",
+		Schematic:  "gnd",
 		SourcePack: packPath,
 	}
 

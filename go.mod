@@ -1,4 +1,4 @@
-module github.com/dpopsuev/rh-dsr
+module github.com/dpopsuev/rh-gnd
 
 go 1.24.2
 

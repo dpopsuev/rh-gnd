@@ -15,9 +15,9 @@ import (
 	"github.com/dpopsuev/origami/schematics/toolkit"
 )
 
-const harvesterSchematic = "harvester"
+const gndSchematic = "gnd"
 
-// Capturer captures a harvester bundle from live sources using a
+// Capturer captures a GND bundle from live sources using a
 // SourceReader. It writes repos/ and docs/ to disk and records a manifest.
 type Capturer struct {
 	reader toolkit.SourceReader
@@ -35,7 +35,7 @@ func NewCapturer(reader toolkit.SourceReader, logger *slog.Logger) *Capturer {
 	return &Capturer{reader: reader, logger: logger}
 }
 
-func (c *Capturer) Schematic() string { return harvesterSchematic }
+func (c *Capturer) Schematic() string { return gndSchematic }
 
 // Capture reads a source pack, fetches all content via the SourceReader,
 // writes it to cfg.OutputDir in the offline bundle layout, and produces
@@ -55,7 +55,7 @@ func (c *Capturer) Capture(ctx context.Context, cfg calibrate.CaptureConfig) err
 
 	var manifest calibrate.Manifest
 	manifest.SchemaVersion = calibrate.SchemaV1
-	manifest.Schematic = harvesterSchematic
+	manifest.Schematic = gndSchematic
 	manifest.CapturedAt = time.Now().UTC()
 
 	for _, src := range sources {
@@ -176,12 +176,12 @@ func isExcluded(path string, exclude []string) bool {
 	return false
 }
 
-// Validator validates a harvester bundle's structure.
+// Validator validates a GND bundle's structure.
 type Validator struct{}
 
 var _ calibrate.BundleValidator = (*Validator)(nil)
 
-func (v *Validator) Schematic() string { return harvesterSchematic }
+func (v *Validator) Schematic() string { return gndSchematic }
 
 // Validate checks the bundle layout and manifest integrity.
 func (v *Validator) Validate(fsys fs.FS) []error {
@@ -196,8 +196,8 @@ func (v *Validator) Validate(fsys fs.FS) []error {
 		return errs
 	}
 
-	if m.Schematic != harvesterSchematic {
-		errs = append(errs, fmt.Errorf("manifest schematic is %q, expected %q", m.Schematic, harvesterSchematic))
+	if m.Schematic != gndSchematic {
+		errs = append(errs, fmt.Errorf("manifest schematic is %q, expected %q", m.Schematic, gndSchematic))
 	}
 	if m.SchemaVersion != calibrate.SchemaV1 {
 		errs = append(errs, fmt.Errorf("unsupported schema version %q", m.SchemaVersion))

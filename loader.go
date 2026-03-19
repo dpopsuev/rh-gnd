@@ -11,7 +11,7 @@ import (
 	yaml "go.yaml.in/yaml/v3"
 )
 
-// LoadFromPath reads a harvester source catalog file (YAML or JSON).
+// LoadFromPath reads a GND source catalog file (YAML or JSON).
 func LoadFromPath(path string) (*toolkit.SliceCatalog, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {

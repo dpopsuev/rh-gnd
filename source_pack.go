@@ -11,7 +11,7 @@ import (
 	yaml "go.yaml.in/yaml/v3"
 )
 
-// SourcePack is a composable collection of harvester sources for a specific
+// SourcePack is a composable collection of GND sources for a specific
 // operator or domain. Packs can include other packs to share common sources
 // (e.g. OCP platform docs) without duplication.
 type SourcePack struct {

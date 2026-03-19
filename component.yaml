@@ -1,5 +1,5 @@
-component: rh-dsr
-module: github.com/dpopsuev/rh-dsr
+component: rh-gnd
+module: github.com/dpopsuev/rh-gnd
 namespace: dsr
 circuit_type: gnd
 version: "1.0.0"

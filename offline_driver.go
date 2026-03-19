@@ -10,7 +10,7 @@ import (
 	"github.com/dpopsuev/origami/schematics/toolkit"
 )
 
-// OfflineFSDriver serves harvester sources from a pre-staged offline bundle
+// OfflineFSDriver serves GND sources from a pre-staged offline bundle
 // stored in an fs.FS. It handles both repo and doc source kinds by reading
 // files directly from the bundle filesystem.
 //

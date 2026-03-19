@@ -9,7 +9,7 @@ import (
 	framework "github.com/dpopsuev/origami"
 	"github.com/dpopsuev/origami/dispatch"
 	fwmcp "github.com/dpopsuev/origami/mcp"
-	dsr "github.com/dpopsuev/rh-dsr"
+	dsr "github.com/dpopsuev/rh-gnd"
 	"github.com/dpopsuev/origami/schematics/toolkit"
 )
 

@@ -8,7 +8,7 @@ import (
 
 	sdkmcp "github.com/modelcontextprotocol/go-sdk/mcp"
 
-	dsr "github.com/dpopsuev/rh-dsr"
+	dsr "github.com/dpopsuev/rh-gnd"
 	"github.com/dpopsuev/origami/schematics/toolkit"
 )
 
@@ -30,15 +30,15 @@ func (m *mockToolCaller) CallTool(_ context.Context, name string, args map[strin
 
 	var text string
 	switch name {
-	case "harvester_ensure":
+	case "gnd_ensure":
 		text = "ok"
-	case "harvester_search":
+	case "gnd_search":
 		results := []toolkit.SearchResult{{Source: "test", Path: "main.go", Line: 1, Snippet: "func main()"}}
 		data, _ := json.Marshal(results)
 		text = string(data)
-	case "harvester_read":
+	case "gnd_read":
 		text = "file content here"
-	case "harvester_list":
+	case "gnd_list":
 		entries := []toolkit.ContentEntry{{Path: "src/", IsDir: true}, {Path: "main.go", Size: 42}}
 		data, _ := json.Marshal(entries)
 		text = string(data)
@@ -64,8 +64,8 @@ func TestMCPReader_Ensure(t *testing.T) {
 		t.Fatalf("Ensure: %v", err)
 	}
 
-	if len(mock.calls) != 1 || mock.calls[0].Name != "harvester_ensure" {
-		t.Fatalf("expected 1 call to harvester_ensure, got %v", mock.calls)
+	if len(mock.calls) != 1 || mock.calls[0].Name != "gnd_ensure" {
+		t.Fatalf("expected 1 call to gnd_ensure, got %v", mock.calls)
 	}
 }
 
@@ -84,8 +84,8 @@ func TestMCPReader_Search(t *testing.T) {
 	if results[0].Path != "main.go" {
 		t.Errorf("result path = %q, want main.go", results[0].Path)
 	}
-	if mock.calls[0].Name != "harvester_search" {
-		t.Errorf("tool name = %q, want harvester_search", mock.calls[0].Name)
+	if mock.calls[0].Name != "gnd_search" {
+		t.Errorf("tool name = %q, want gnd_search", mock.calls[0].Name)
 	}
 }
 

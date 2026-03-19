@@ -71,7 +71,7 @@ func TestCircuit_Walk(t *testing.T) {
 		t.Fatalf("BuildGraph: %v", err)
 	}
 
-	walker := framework.NewProcessWalker("test-harvester")
+	walker := framework.NewProcessWalker("test-gnd")
 	walker.State().Context["dsr.search_keywords"] = []string{"TestPTP"}
 
 	if err := g.Walk(context.Background(), walker, "tree"); err != nil {

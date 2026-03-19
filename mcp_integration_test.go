@@ -8,7 +8,7 @@ import (
 
 	sdkmcp "github.com/modelcontextprotocol/go-sdk/mcp"
 
-	dsr "github.com/dpopsuev/rh-dsr"
+	dsr "github.com/dpopsuev/rh-gnd"
 	"github.com/dpopsuev/origami/schematics/toolkit"
 )
 
@@ -35,7 +35,7 @@ func TestMCPIntegration_StubDriver_RoundTrip(t *testing.T) {
 	router := dsr.NewRouter(dsr.WithGitDriver(driver))
 
 	server := sdkmcp.NewServer(
-		&sdkmcp.Implementation{Name: "test-harvester", Version: "v0.1.0"},
+		&sdkmcp.Implementation{Name: "test-gnd", Version: "v0.1.0"},
 		nil,
 	)
 	dsr.RegisterTools(server, router)

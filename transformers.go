@@ -13,7 +13,7 @@ import (
 
 const maxTokenBudget = 32000
 
-// CodeContext is the aggregate output of the Harvester circuit.
+// CodeContext is the aggregate output of the GND circuit.
 // It contains the file trees, search results, and file contents
 // gathered from all configured sources.
 type CodeContext struct {

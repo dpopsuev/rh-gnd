@@ -12,7 +12,7 @@ import (
 
 // MCPReader implements Reader by delegating to an MCP server via
 // subprocess.ToolCaller. It translates Reader method calls into
-// MCP tool calls matching the harvester schematic's tool names.
+// MCP tool calls matching the GND schematic's tool names.
 type MCPReader struct {
 	caller subprocess.ToolCaller
 }
@@ -24,7 +24,7 @@ func NewMCPReader(caller subprocess.ToolCaller) *MCPReader {
 
 func (r *MCPReader) Ensure(ctx context.Context, src toolkit.Source) error {
 	args := map[string]any{"source": src}
-	result, err := r.caller.CallTool(ctx, "harvester_ensure", args)
+	result, err := r.caller.CallTool(ctx, "gnd_ensure", args)
 	if err != nil {
 		return fmt.Errorf("MCPReader.Ensure: %w", err)
 	}
@@ -40,7 +40,7 @@ func (r *MCPReader) Search(ctx context.Context, src toolkit.Source, query string
 		"query":       query,
 		"max_results": maxResults,
 	}
-	results, err := subprocess.CallToolTyped[[]toolkit.SearchResult](ctx, r.caller, "harvester_search", args)
+	results, err := subprocess.CallToolTyped[[]toolkit.SearchResult](ctx, r.caller, "gnd_search", args)
 	if err != nil {
 		return nil, fmt.Errorf("MCPReader.Search: %w", err)
 	}
@@ -52,7 +52,7 @@ func (r *MCPReader) Read(ctx context.Context, src toolkit.Source, path string) (
 		"source": src,
 		"path":   path,
 	}
-	result, err := r.caller.CallTool(ctx, "harvester_read", args)
+	result, err := r.caller.CallTool(ctx, "gnd_read", args)
 	if err != nil {
 		return nil, fmt.Errorf("MCPReader.Read: %w", err)
 	}
@@ -68,7 +68,7 @@ func (r *MCPReader) List(ctx context.Context, src toolkit.Source, root string, m
 		"root":      root,
 		"max_depth": maxDepth,
 	}
-	entries, err := subprocess.CallToolTyped[[]toolkit.ContentEntry](ctx, r.caller, "harvester_list", args)
+	entries, err := subprocess.CallToolTyped[[]toolkit.ContentEntry](ctx, r.caller, "gnd_list", args)
 	if err != nil {
 		return nil, fmt.Errorf("MCPReader.List: %w", err)
 	}

@@ -20,8 +20,8 @@ import (
 
 	"github.com/dpopsuev/origami/connectors/docs"
 	"github.com/dpopsuev/origami/connectors/github"
-	dsr "github.com/dpopsuev/rh-dsr"
-	"github.com/dpopsuev/rh-dsr/mcpconfig"
+	dsr "github.com/dpopsuev/rh-gnd"
+	"github.com/dpopsuev/rh-gnd/mcpconfig"
 )
 
 func main() {
