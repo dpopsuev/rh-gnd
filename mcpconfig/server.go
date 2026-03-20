@@ -16,8 +16,9 @@ import (
 // Server wraps the generic CircuitServer with GND-specific domain hooks.
 type Server struct {
 	*fwmcp.CircuitServer
-	Reader  toolkit.SourceReader
-	Catalog toolkit.SourceCatalog
+	Reader   toolkit.SourceReader
+	Catalog  toolkit.SourceCatalog
+	StateDir string
 }
 
 // ServerOption configures a GND MCP server.
@@ -33,6 +34,11 @@ func WithCatalog(c toolkit.SourceCatalog) ServerOption {
 	return func(s *Server) { s.Catalog = c }
 }
 
+// WithStateDir sets the runtime state directory for trace recording.
+func WithStateDir(dir string) ServerOption {
+	return func(s *Server) { s.StateDir = dir }
+}
+
 // NewServer creates a GND MCP server.
 func NewServer(opts ...ServerOption) *Server {
 	s := &Server{}
@@ -45,8 +51,9 @@ func NewServer(opts ...ServerOption) *Server {
 
 func (s *Server) buildConfig() fwmcp.CircuitConfig {
 	return fwmcp.CircuitConfig{
-		Name:    "origami-gnd",
-		Version: "dev",
+		Name:     "origami-gnd",
+		Version:  "dev",
+		StateDir: s.StateDir,
 		StepSchemas: []fwmcp.StepSchema{
 			{
 				Name: "synthesize",
