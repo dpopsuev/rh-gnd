@@ -4,7 +4,8 @@ import (
 	"context"
 	"testing"
 
-	framework "github.com/dpopsuev/origami"
+	"github.com/dpopsuev/origami/circuit"
+	"github.com/dpopsuev/origami/engine"
 	"github.com/dpopsuev/origami/schematics/toolkit"
 	_ "github.com/dpopsuev/origami/topology"
 )
@@ -55,23 +56,23 @@ func TestCircuit_Walk(t *testing.T) {
 	}
 	catalog := txCatalog()
 
-	def, err := framework.LoadCircuit([]byte(gatherOnlyCircuitYAML))
+	def, err := circuit.LoadCircuit([]byte(gatherOnlyCircuitYAML))
 	if err != nil {
 		t.Fatalf("LoadCircuit: %v", err)
 	}
 
 	comp := TransformerComponent(reader, catalog)
-	reg, err := framework.MergeComponents(framework.GraphRegistries{}, comp)
+	reg, err := engine.MergeComponents(engine.GraphRegistries{}, comp)
 	if err != nil {
 		t.Fatalf("MergeComponents: %v", err)
 	}
 
-	g, err := def.BuildGraph(reg)
+	g, err := engine.BuildGraph(def, reg)
 	if err != nil {
 		t.Fatalf("BuildGraph: %v", err)
 	}
 
-	walker := framework.NewProcessWalker("test-gnd")
+	walker := circuit.NewProcessWalker("test-gnd")
 	walker.State().Context["dsr.search_keywords"] = []string{"TestPTP"}
 
 	if err := g.Walk(context.Background(), walker, "tree"); err != nil {
@@ -126,24 +127,24 @@ func TestCircuit_FullWithSynthesize(t *testing.T) {
 	catalog := txCatalog()
 
 	// Use embedded circuit YAML (includes synthesize node).
-	def, err := framework.LoadCircuit(DefaultCircuitYAML())
+	def, err := circuit.LoadCircuit(DefaultCircuitYAML())
 	if err != nil {
 		t.Fatalf("LoadCircuit: %v", err)
 	}
 
 	gatherComp := TransformerComponent(reader, catalog)
 	synthComp := SynthesizeComponent(nil) // deterministic passthrough
-	reg, err := framework.MergeComponents(framework.GraphRegistries{}, gatherComp, synthComp)
+	reg, err := engine.MergeComponents(engine.GraphRegistries{}, gatherComp, synthComp)
 	if err != nil {
 		t.Fatalf("MergeComponents: %v", err)
 	}
 
-	g, err := def.BuildGraph(reg)
+	g, err := engine.BuildGraph(def, reg)
 	if err != nil {
 		t.Fatalf("BuildGraph: %v", err)
 	}
 
-	walker := framework.NewProcessWalker("test-gnd-full")
+	walker := circuit.NewProcessWalker("test-gnd-full")
 	walker.State().Context["dsr.search_keywords"] = []string{"TestPTP"}
 
 	if err := g.Walk(context.Background(), walker, "tree"); err != nil {
@@ -172,23 +173,23 @@ func TestCircuit_EmptyCatalog(t *testing.T) {
 	reader := &txReader{}
 	emptyCatalog := &toolkit.SliceCatalog{}
 
-	def, err := framework.LoadCircuit([]byte(gatherOnlyCircuitYAML))
+	def, err := circuit.LoadCircuit([]byte(gatherOnlyCircuitYAML))
 	if err != nil {
 		t.Fatalf("LoadCircuit: %v", err)
 	}
 
 	comp := TransformerComponent(reader, emptyCatalog)
-	reg, err := framework.MergeComponents(framework.GraphRegistries{}, comp)
+	reg, err := engine.MergeComponents(engine.GraphRegistries{}, comp)
 	if err != nil {
 		t.Fatalf("MergeComponents: %v", err)
 	}
 
-	g, err := def.BuildGraph(reg)
+	g, err := engine.BuildGraph(def, reg)
 	if err != nil {
 		t.Fatalf("BuildGraph: %v", err)
 	}
 
-	walker := framework.NewProcessWalker("test-empty")
+	walker := circuit.NewProcessWalker("test-empty")
 	if err := g.Walk(context.Background(), walker, "tree"); err != nil {
 		t.Fatalf("Walk: %v", err)
 	}

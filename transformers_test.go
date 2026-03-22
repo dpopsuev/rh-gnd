@@ -4,7 +4,8 @@ import (
 	"context"
 	"testing"
 
-	framework "github.com/dpopsuev/origami"
+	"github.com/dpopsuev/origami/circuit"
+	"github.com/dpopsuev/origami/engine"
 	"github.com/dpopsuev/origami/schematics/toolkit"
 )
 
@@ -57,8 +58,8 @@ func TestTreeTransformer(t *testing.T) {
 	}
 	tr := newTreeTransformer(reader, txCatalog())
 
-	result, err := tr.Transform(context.Background(), &framework.TransformerContext{
-		WalkerState: &framework.WalkerState{Context: map[string]any{}},
+	result, err := tr.Transform(context.Background(), &engine.TransformerContext{
+		WalkerState: &circuit.WalkerState{Context: map[string]any{}},
 	})
 	if err != nil {
 		t.Fatalf("Transform() error: %v", err)
@@ -92,13 +93,13 @@ func TestSearchTransformer(t *testing.T) {
 	}
 	tr := newSearchTransformer(reader, txCatalog())
 
-	ws := &framework.WalkerState{
+	ws := &circuit.WalkerState{
 		Context: map[string]any{
 			"dsr.search_keywords": []string{"TestPTP"},
 		},
 	}
 
-	result, err := tr.Transform(context.Background(), &framework.TransformerContext{WalkerState: ws})
+	result, err := tr.Transform(context.Background(), &engine.TransformerContext{WalkerState: ws})
 	if err != nil {
 		t.Fatalf("Transform() error: %v", err)
 	}
@@ -119,8 +120,8 @@ func TestSearchTransformer_NoKeywords(t *testing.T) {
 	reader := &txReader{}
 	tr := newSearchTransformer(reader, txCatalog())
 
-	ws := &framework.WalkerState{Context: map[string]any{}}
-	result, err := tr.Transform(context.Background(), &framework.TransformerContext{WalkerState: ws})
+	ws := &circuit.WalkerState{Context: map[string]any{}}
+	result, err := tr.Transform(context.Background(), &engine.TransformerContext{WalkerState: ws})
 	if err != nil {
 		t.Fatalf("Transform() error: %v", err)
 	}
@@ -146,15 +147,15 @@ func TestReadTransformer(t *testing.T) {
 	trees := []RepoTree{{Repo: "acme/repo1", Branch: "main"}}
 	hits := []SearchHit{{Repo: "acme/repo1", File: "pkg/handler.go", Line: 42}}
 
-	ws := &framework.WalkerState{
+	ws := &circuit.WalkerState{
 		Context: map[string]any{},
-		Outputs: map[string]framework.Artifact{
+		Outputs: map[string]circuit.Artifact{
 			"tree":   &testArtifact{raw: trees},
 			"search": &testArtifact{raw: hits},
 		},
 	}
 
-	result, err := tr.Transform(context.Background(), &framework.TransformerContext{WalkerState: ws})
+	result, err := tr.Transform(context.Background(), &engine.TransformerContext{WalkerState: ws})
 	if err != nil {
 		t.Fatalf("Transform() error: %v", err)
 	}
@@ -186,15 +187,15 @@ func TestReadTransformer_TokenBudget(t *testing.T) {
 	}
 	tr := newReadTransformer(reader, txCatalog())
 
-	ws := &framework.WalkerState{
+	ws := &circuit.WalkerState{
 		Context: map[string]any{},
-		Outputs: map[string]framework.Artifact{
+		Outputs: map[string]circuit.Artifact{
 			"tree":   &testArtifact{raw: []RepoTree(nil)},
 			"search": &testArtifact{raw: []SearchHit{{Repo: "acme/repo1", File: "big.go"}}},
 		},
 	}
 
-	result, err := tr.Transform(context.Background(), &framework.TransformerContext{WalkerState: ws})
+	result, err := tr.Transform(context.Background(), &engine.TransformerContext{WalkerState: ws})
 	if err != nil {
 		t.Fatalf("Transform() error: %v", err)
 	}
@@ -244,7 +245,7 @@ func TestSplitRepoKey(t *testing.T) {
 	}
 }
 
-// testArtifact implements framework.Artifact for testing.
+// testArtifact implements circuit.Artifact for testing.
 type testArtifact struct {
 	raw any
 }

@@ -6,7 +6,8 @@ import (
 	"fmt"
 	"strings"
 
-	framework "github.com/dpopsuev/origami"
+	"github.com/dpopsuev/origami/circuit"
+	"github.com/dpopsuev/origami/engine"
 	"github.com/dpopsuev/origami/dispatch"
 	"github.com/dpopsuev/origami/schematics/toolkit"
 )
@@ -49,11 +50,11 @@ type FileContent struct {
 // TransformerComponent returns a Component containing the GND circuit's
 // deterministic transformers: tree, search, read. These wrap SourceReader
 // operations and require no LLM dispatch.
-func TransformerComponent(reader toolkit.SourceReader, catalog toolkit.SourceCatalog) *framework.Component {
-	return &framework.Component{
+func TransformerComponent(reader toolkit.SourceReader, catalog toolkit.SourceCatalog) *engine.Component {
+	return &engine.Component{
 		Namespace:   "dsr",
 		Name:        "dsr-transformers",
-		Transformers: framework.TransformerRegistry{
+		Transformers: engine.TransformerRegistry{
 			"tree":   newTreeTransformer(reader, catalog),
 			"search": newSearchTransformer(reader, catalog),
 			"read":   newReadTransformer(reader, catalog),
@@ -65,11 +66,11 @@ func TransformerComponent(reader toolkit.SourceReader, catalog toolkit.SourceCat
 // When disp is nil, the transformer passes through CodeContext from the read
 // node (deterministic mode). When set, it builds a prompt and dispatches via
 // the MuxDispatcher for LLM synthesis.
-func SynthesizeComponent(disp dispatch.Dispatcher) *framework.Component {
-	return &framework.Component{
+func SynthesizeComponent(disp dispatch.Dispatcher) *engine.Component {
+	return &engine.Component{
 		Namespace: "dsr",
 		Name:      "dsr-synthesize",
-		Transformers: framework.TransformerRegistry{
+		Transformers: engine.TransformerRegistry{
 			"synthesize": &synthesizeTransformer{dispatcher: disp},
 		},
 	}
@@ -86,7 +87,7 @@ func (t *synthesizeTransformer) Name() string { return "dsr.synthesize" }
 
 func (t *synthesizeTransformer) Deterministic() bool { return t.dispatcher == nil }
 
-func (t *synthesizeTransformer) Transform(ctx context.Context, tc *framework.TransformerContext) (any, error) {
+func (t *synthesizeTransformer) Transform(ctx context.Context, tc *engine.TransformerContext) (any, error) {
 	cc, ok := outputArtifact[*CodeContext](tc.WalkerState, "read")
 	if !ok {
 		return &CodeContext{}, nil
@@ -205,7 +206,7 @@ func newTreeTransformer(r toolkit.SourceReader, c toolkit.SourceCatalog) *treeTr
 func (t *treeTransformer) Name() string { return "dsr.tree" }
 func (t *treeTransformer) IsDeterministic() bool { return true }
 
-func (t *treeTransformer) Transform(ctx context.Context, _ *framework.TransformerContext) (any, error) {
+func (t *treeTransformer) Transform(ctx context.Context, _ *engine.TransformerContext) (any, error) {
 	if t.catalog == nil {
 		return &CodeContext{}, nil
 	}
@@ -245,7 +246,7 @@ func newSearchTransformer(r toolkit.SourceReader, c toolkit.SourceCatalog) *sear
 func (t *searchTransformer) Name() string { return "dsr.search" }
 func (t *searchTransformer) IsDeterministic() bool { return true }
 
-func (t *searchTransformer) Transform(ctx context.Context, tc *framework.TransformerContext) (any, error) {
+func (t *searchTransformer) Transform(ctx context.Context, tc *engine.TransformerContext) (any, error) {
 	keywords := extractSearchKeywords(tc.WalkerState)
 	if len(keywords) == 0 || t.catalog == nil {
 		return []SearchHit(nil), nil
@@ -292,7 +293,7 @@ func newReadTransformer(r toolkit.SourceReader, c toolkit.SourceCatalog) *readTr
 func (t *readTransformer) Name() string { return "dsr.read" }
 func (t *readTransformer) IsDeterministic() bool { return true }
 
-func (t *readTransformer) Transform(ctx context.Context, tc *framework.TransformerContext) (any, error) {
+func (t *readTransformer) Transform(ctx context.Context, tc *engine.TransformerContext) (any, error) {
 	cc := &CodeContext{}
 
 	// Collect trees from tree node output.
@@ -355,7 +356,7 @@ func (t *readTransformer) Transform(ctx context.Context, tc *framework.Transform
 // It looks for a dedicated "dsr.search_keywords" key first (set by
 // the parent circuit), then falls back to reading failure test name and
 // prior candidate repos from RCA context keys.
-func extractSearchKeywords(ws *framework.WalkerState) []string {
+func extractSearchKeywords(ws *circuit.WalkerState) []string {
 	if ws == nil {
 		return nil
 	}
@@ -386,7 +387,7 @@ func extractSearchKeywords(ws *framework.WalkerState) []string {
 
 // outputArtifact extracts a typed value from a walker's Outputs by node name.
 // It unwraps transformerArtifact via Raw() if needed.
-func outputArtifact[T any](ws *framework.WalkerState, nodeName string) (T, bool) {
+func outputArtifact[T any](ws *circuit.WalkerState, nodeName string) (T, bool) {
 	var zero T
 	if ws == nil || ws.Outputs == nil {
 		return zero, false

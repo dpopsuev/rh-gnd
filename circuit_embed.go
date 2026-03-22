@@ -4,7 +4,7 @@ import (
 	_ "embed"
 	"fmt"
 
-	framework "github.com/dpopsuev/origami"
+	"github.com/dpopsuev/origami/circuit"
 )
 
 //go:embed circuit.yaml
@@ -15,7 +15,7 @@ func DefaultCircuitYAML() []byte { return defaultCircuitYAML }
 
 // SchematicResolver returns an AssetResolver that resolves "gnd"
 // to the embedded base circuit.
-func SchematicResolver() framework.AssetResolver {
+func SchematicResolver() circuit.AssetResolver {
 	return func(name string) ([]byte, error) {
 		if name == "gnd" {
 			return defaultCircuitYAML, nil

@@ -6,7 +6,8 @@ import (
 	"fmt"
 	"log/slog"
 
-	framework "github.com/dpopsuev/origami"
+	"github.com/dpopsuev/origami/circuit"
+	"github.com/dpopsuev/origami/engine"
 	"github.com/dpopsuev/origami/dispatch"
 	fwmcp "github.com/dpopsuev/origami/mcp"
 	dsr "github.com/dpopsuev/rh-gnd"
@@ -130,7 +131,7 @@ func (s *Server) createSession(_ context.Context, params fwmcp.StartParams, disp
 		synthDisp = disp
 	}
 
-	def, err := framework.LoadCircuit(dsr.DefaultCircuitYAML())
+	def, err := circuit.LoadCircuit(dsr.DefaultCircuitYAML())
 	if err != nil {
 		return nil, fwmcp.SessionMeta{}, fmt.Errorf("load gnd circuit: %w", err)
 	}
@@ -151,16 +152,16 @@ func (s *Server) createSession(_ context.Context, params fwmcp.StartParams, disp
 	}
 
 	runFn := func(ctx context.Context) (any, error) {
-		results := framework.BatchWalk(ctx, framework.BatchWalkConfig{
+		results := engine.BatchWalk(ctx, engine.BatchWalkConfig{
 			Def: def,
-			Shared: framework.GraphRegistries{
-				Transformers: framework.TransformerRegistry{},
+			Shared: engine.GraphRegistries{
+				Transformers: engine.TransformerRegistry{},
 			},
-			Cases: []framework.BatchCase{
+			Cases: []engine.BatchCase{
 				{
 					ID:         "gnd-0",
 					Context:    walkerCtx,
-					Components: []*framework.Component{gatherComp, synthComp},
+					Components: []*engine.Component{gatherComp, synthComp},
 				},
 			},
 			Parallel: 1,
