@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/dpopsuev/origami/schematics/toolkit"
+	"github.com/dpopsuev/origami/toolkit"
 )
 
 type stubReader struct{}

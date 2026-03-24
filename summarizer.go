@@ -1,6 +1,6 @@
 package dsr
 
-import "github.com/dpopsuev/origami/schematics/toolkit"
+import "github.com/dpopsuev/origami/toolkit"
 
 // SummarizeStrategy controls how a source's content is presented within
 // a token budget.

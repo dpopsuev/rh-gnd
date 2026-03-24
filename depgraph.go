@@ -3,7 +3,7 @@ package dsr
 import (
 	"fmt"
 
-	"github.com/dpopsuev/origami/schematics/toolkit"
+	"github.com/dpopsuev/origami/toolkit"
 )
 
 // DepEdge declares that source From must be resolved before source To.

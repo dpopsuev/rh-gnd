@@ -8,7 +8,7 @@ import (
 
 	"github.com/dpopsuev/origami/calibrate"
 	"github.com/dpopsuev/rh-gnd"
-	"github.com/dpopsuev/origami/schematics/toolkit"
+	"github.com/dpopsuev/origami/toolkit"
 )
 
 type capturerStubDriver struct {

@@ -1,6 +1,6 @@
 package dsr
 
-import "github.com/dpopsuev/origami/schematics/toolkit"
+import "github.com/dpopsuev/origami/toolkit"
 
 // RouteRequest describes what the circuit is looking for — a component under
 // investigation, a hypothesis being tested, the current step, and any

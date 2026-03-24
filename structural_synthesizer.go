@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dpopsuev/origami/schematics/toolkit"
+	"github.com/dpopsuev/origami/toolkit"
 )
 
 // StructuralSynthesizer produces DerivedArtifacts by deterministically

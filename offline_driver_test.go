@@ -6,7 +6,7 @@ import (
 	"testing/fstest"
 
 	"github.com/dpopsuev/rh-gnd"
-	"github.com/dpopsuev/origami/schematics/toolkit"
+	"github.com/dpopsuev/origami/toolkit"
 )
 
 func offlineBundle() fstest.MapFS {

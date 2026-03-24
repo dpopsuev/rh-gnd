@@ -13,7 +13,7 @@ import (
 	"github.com/dpopsuev/bugle/signal"
 	fwmcp "github.com/dpopsuev/origami/mcp"
 	dsr "github.com/dpopsuev/rh-gnd"
-	"github.com/dpopsuev/origami/schematics/toolkit"
+	"github.com/dpopsuev/origami/toolkit"
 )
 
 // Server wraps the generic CircuitServer with GND-specific domain hooks.

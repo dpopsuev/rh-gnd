@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/dpopsuev/origami/schematics/toolkit"
+	"github.com/dpopsuev/origami/toolkit"
 )
 
 // DerivedArtifact is a transient domain context document produced by

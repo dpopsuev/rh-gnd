@@ -3,7 +3,7 @@ package dsr
 import (
 	"strings"
 
-	"github.com/dpopsuev/origami/schematics/toolkit"
+	"github.com/dpopsuev/origami/toolkit"
 )
 
 // VersionEntry maps a version string to the concrete branch, tag, and

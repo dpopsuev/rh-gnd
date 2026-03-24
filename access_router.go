@@ -6,7 +6,7 @@ import (
 	"io/fs"
 	"sync"
 
-	"github.com/dpopsuev/origami/schematics/toolkit"
+	"github.com/dpopsuev/origami/toolkit"
 )
 
 // RouterOption configures an AccessRouter.

@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/dpopsuev/rh-gnd"
-	"github.com/dpopsuev/origami/schematics/toolkit"
+	"github.com/dpopsuev/origami/toolkit"
 )
 
 func TestTruncateSummarizer_Full_FitsInBudget(t *testing.T) {

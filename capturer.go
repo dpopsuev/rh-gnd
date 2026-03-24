@@ -12,7 +12,7 @@ import (
 	"time"
 
 	"github.com/dpopsuev/origami/calibrate"
-	"github.com/dpopsuev/origami/schematics/toolkit"
+	"github.com/dpopsuev/origami/toolkit"
 )
 
 const gndSchematic = "gnd"

@@ -8,7 +8,7 @@ import (
 	sdkmcp "github.com/modelcontextprotocol/go-sdk/mcp"
 
 	dsr "github.com/dpopsuev/rh-gnd"
-	"github.com/dpopsuev/origami/schematics/toolkit"
+	"github.com/dpopsuev/origami/toolkit"
 )
 
 func newGNDServeMux(router *dsr.AccessRouter) *http.ServeMux {

@@ -1,6 +1,6 @@
 package dsr
 
-import "github.com/dpopsuev/origami/schematics/toolkit"
+import "github.com/dpopsuev/origami/toolkit"
 
 // Driver is an alias for toolkit.Driver, kept for backward compatibility.
 // New code should import toolkit.Driver directly.

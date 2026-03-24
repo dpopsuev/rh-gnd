@@ -3,7 +3,7 @@ package dsr
 import (
 	"testing"
 
-	"github.com/dpopsuev/origami/schematics/toolkit"
+	"github.com/dpopsuev/origami/toolkit"
 )
 
 var testCatalog = &toolkit.SliceCatalog{
