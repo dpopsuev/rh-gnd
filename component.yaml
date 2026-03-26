@@ -4,9 +4,7 @@ namespace: dsr
 circuit_type: gnd
 version: "1.0.0"
 description: "Red Hat Gather & Diffuse — pluggable code context gathering and synthesis"
-factory: NewRouter
-serve: cmd/serve
-adapter: NewMCPReader
+hooks: "Hooks()"
 resolver: SchematicResolver
 requires:
   origami: ">=0.3.0"
