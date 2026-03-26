@@ -3,6 +3,8 @@ package dsr
 import (
 	"context"
 	"encoding/json"
+	"io/fs"
+	"log/slog"
 
 	sdkmcp "github.com/modelcontextprotocol/go-sdk/mcp"
 
@@ -23,10 +25,11 @@ func RegisterTools(server *sdkmcp.Server, router *AccessRouter) {
 				Source toolkit.Source `json:"source"`
 			}
 			if err := json.Unmarshal(req.Params.Arguments, &args); err != nil {
-				return errToolResult("invalid arguments: " + err.Error()), nil
+				return errToolResult("invalid arguments"), nil
 			}
 			if err := router.Ensure(ctx, args.Source); err != nil {
-				return errToolResult(err.Error()), nil
+				slog.Error("gnd_ensure failed", "source", args.Source.Name, "error", err)
+				return errToolResult("ensure failed for source"), nil
 			}
 			return &sdkmcp.CallToolResult{
 				Content: []sdkmcp.Content{&sdkmcp.TextContent{Text: "ok"}},
@@ -47,14 +50,18 @@ func RegisterTools(server *sdkmcp.Server, router *AccessRouter) {
 				MaxResults int      `json:"max_results"`
 			}
 			if err := json.Unmarshal(req.Params.Arguments, &args); err != nil {
-				return errToolResult("invalid arguments: " + err.Error()), nil
+				return errToolResult("invalid arguments"), nil
 			}
-			if args.MaxResults <= 0 {
+			if args.MaxResults <= 0 || args.MaxResults > 1000 {
 				args.MaxResults = 10
+			}
+			if len(args.Query) > 10000 {
+				return errToolResult("query too long (max 10000 chars)"), nil
 			}
 			results, err := router.Search(ctx, args.Source, args.Query, args.MaxResults)
 			if err != nil {
-				return errToolResult(err.Error()), nil
+				slog.Error("gnd_search failed", "source", args.Source.Name, "error", err)
+				return errToolResult("search failed"), nil
 			}
 			data, err := json.Marshal(results)
 			if err != nil {
@@ -78,11 +85,15 @@ func RegisterTools(server *sdkmcp.Server, router *AccessRouter) {
 				Path   string   `json:"path"`
 			}
 			if err := json.Unmarshal(req.Params.Arguments, &args); err != nil {
-				return errToolResult("invalid arguments: " + err.Error()), nil
+				return errToolResult("invalid arguments"), nil
+			}
+			if !fs.ValidPath(args.Path) {
+				return errToolResult("invalid path"), nil
 			}
 			content, err := router.Read(ctx, args.Source, args.Path)
 			if err != nil {
-				return errToolResult(err.Error()), nil
+				slog.Error("gnd_read failed", "source", args.Source.Name, "path", args.Path, "error", err)
+				return errToolResult("read failed"), nil
 			}
 			return &sdkmcp.CallToolResult{
 				Content: []sdkmcp.Content{&sdkmcp.TextContent{Text: string(content)}},
@@ -103,11 +114,18 @@ func RegisterTools(server *sdkmcp.Server, router *AccessRouter) {
 				MaxDepth int      `json:"max_depth"`
 			}
 			if err := json.Unmarshal(req.Params.Arguments, &args); err != nil {
-				return errToolResult("invalid arguments: " + err.Error()), nil
+				return errToolResult("invalid arguments"), nil
+			}
+			if args.Root != "" && !fs.ValidPath(args.Root) {
+				return errToolResult("invalid root path"), nil
+			}
+			if args.MaxDepth <= 0 || args.MaxDepth > 10 {
+				args.MaxDepth = 3
 			}
 			entries, err := router.List(ctx, args.Source, args.Root, args.MaxDepth)
 			if err != nil {
-				return errToolResult(err.Error()), nil
+				slog.Error("gnd_list failed", "source", args.Source.Name, "root", args.Root, "error", err)
+				return errToolResult("list failed"), nil
 			}
 			data, err := json.Marshal(entries)
 			if err != nil {

@@ -73,6 +73,9 @@ func (d *OfflineFSDriver) Search(_ context.Context, src toolkit.Source, query st
 }
 
 func (d *OfflineFSDriver) Read(_ context.Context, src toolkit.Source, path string) ([]byte, error) {
+	if !fs.ValidPath(path) {
+		return nil, fmt.Errorf("offline read %s: invalid path", src.Name)
+	}
 	root := d.sourceRoot(src)
 	fullPath := filepath.Join(root, path)
 	data, err := fs.ReadFile(d.fsys, fullPath)
@@ -83,6 +86,9 @@ func (d *OfflineFSDriver) Read(_ context.Context, src toolkit.Source, path strin
 }
 
 func (d *OfflineFSDriver) List(_ context.Context, src toolkit.Source, root string, maxDepth int) ([]toolkit.ContentEntry, error) {
+	if root != "" && !fs.ValidPath(root) {
+		return nil, fmt.Errorf("offline list %s: invalid root path", src.Name)
+	}
 	srcRoot := d.sourceRoot(src)
 	searchRoot := filepath.Join(srcRoot, root)
 	var entries []toolkit.ContentEntry
