@@ -1,19 +1,11 @@
-component: rh-gnd
-module: github.com/dpopsuev/origami-gnd
-namespace: dsr
-circuit_type: gnd
-version: "1.0.0"
-description: "Red Hat Gather & Diffuse — pluggable code context gathering and synthesis"
-hooks: "Hooks()"
-resolver: SchematicResolver
-requires:
-  origami: ">=0.3.0"
-  sockets:
-    - name: git
-      type: Driver
-      option: WithGitDriver
-      description: Git repository driver for source code access
-    - name: docs
-      type: Driver
-      option: WithDocsDriver
-      description: HTTP documentation driver for web-based docs
+apiVersion: origami/v1
+kind: Schematic
+metadata:
+  name: origami-gnd
+  module: github.com/dpopsuev/origami-gnd
+  namespace: dsr
+  description: "Gather & Diffuse — pluggable code context gathering and synthesis"
+spec:
+  version: "1.0.0"
+  hooks: "Hooks()"
+  resolver: SchematicResolver
