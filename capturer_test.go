@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/dpopsuev/origami/calibrate"
-	"github.com/dpopsuev/rh-gnd"
+	"github.com/dpopsuev/origami-gnd"
 	"github.com/dpopsuev/origami/toolkit"
 )
 

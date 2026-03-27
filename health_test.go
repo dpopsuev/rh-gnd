@@ -7,7 +7,7 @@ import (
 
 	sdkmcp "github.com/modelcontextprotocol/go-sdk/mcp"
 
-	dsr "github.com/dpopsuev/rh-gnd"
+	dsr "github.com/dpopsuev/origami-gnd"
 	"github.com/dpopsuev/origami/toolkit"
 )
 

@@ -7,7 +7,7 @@ import (
 	"testing"
 	"testing/fstest"
 
-	"github.com/dpopsuev/rh-gnd"
+	"github.com/dpopsuev/origami-gnd"
 	"github.com/dpopsuev/origami/toolkit"
 )
 

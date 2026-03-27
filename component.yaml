@@ -1,5 +1,5 @@
 component: rh-gnd
-module: github.com/dpopsuev/rh-gnd
+module: github.com/dpopsuev/origami-gnd
 namespace: dsr
 circuit_type: gnd
 version: "1.0.0"

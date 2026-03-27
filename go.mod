@@ -1,4 +1,4 @@
-module github.com/dpopsuev/rh-gnd
+module github.com/dpopsuev/origami-gnd
 
 go 1.25.7
 
@@ -11,7 +11,7 @@ require (
 require (
 	github.com/clipperhouse/stringish v0.1.1 // indirect
 	github.com/clipperhouse/uax29/v2 v2.5.0 // indirect
-	github.com/dpopsuev/bugle v0.13.0
+	github.com/dpopsuev/bugle v0.14.0
 	github.com/expr-lang/expr v1.17.8 // indirect
 	github.com/google/jsonschema-go v0.4.2 // indirect
 	github.com/jedib0t/go-pretty/v6 v6.7.8 // indirect
